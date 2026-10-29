@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>제주 먹거리 장터</title>
+<meta name="description" content="제주 먹거리를 구경하고 장바구니에 담아 보세요. 제주 3D 지도도 함께 볼 수 있어요.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0f3b57; --cream:#fff8ec; --orange:#ff8a00; --orange-d:#e57600; --teal:#1a8bb5; --pink:#ff7a9a; --leaf:#4caf50;
+  --white:#fff; --shadow:4px 4px 0 var(--navy);
+}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth;scroll-padding-top:76px}
+body{font-family:Jua,"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;background:var(--cream);color:var(--navy);line-height:1.5;font-size:17px}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer}
+a{color:inherit}
+:focus-visible{outline:3px dashed var(--pink);outline-offset:3px}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.wrap{max-width:1180px;margin:0 auto;padding:0 18px}
+
+/* header */
+header{position:sticky;top:0;z-index:30;background:var(--cream);border-bottom:3px solid var(--navy)}
+header .wrap{display:flex;align-items:center;justify-content:space-between;height:62px;gap:10px}
+.brand{display:flex;align-items:center;gap:8px;text-decoration:none;font-size:1.2rem;white-space:nowrap}
+.mini{width:30px;height:30px}
+nav{display:flex;align-items:center;gap:6px}
+nav a,nav button.pill{padding:6px 14px;border-radius:999px;text-decoration:none;border:0;background:none;font-size:1rem}
+nav a:hover{background:#ffe3bd}
+.pill.cart{background:var(--orange);color:#fff;border:3px solid var(--navy);box-shadow:3px 3px 0 var(--navy);font-weight:400}
+.pill.cart:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--navy)}
+.badge{display:inline-grid;place-items:center;min-width:22px;height:22px;padding:0 6px;border-radius:99px;background:var(--navy);color:#fff;font-size:.78rem;margin-left:4px}
+.badge.bump{animation:bump .3s}
+@keyframes bump{50%{transform:scale(1.5)}}
+.hb{background:var(--pink);}
+
+/* hero */
+.hero{background:linear-gradient(180deg,#1a8bb5 0%,#2aa2c2 55%,#d6a45a 100%);color:#fff;position:relative;padding:56px 0 110px}
+.hero .wrap{display:grid;grid-template-columns:1.4fr 1fr;gap:20px;align-items:center}
+.eyebrow{letter-spacing:.2em;font-size:.9rem;opacity:.95}
+.hero h1{font-size:clamp(2.2rem,6vw,3.6rem);line-height:1.15;margin:10px 0 14px;text-shadow:2px 2px 0 rgba(15,59,87,.35)}
+.hero p{max-width:30em;margin-bottom:22px;font-size:1.05rem}
+.btn{display:inline-block;padding:11px 24px;border-radius:999px;border:3px solid var(--navy);background:#fff;color:var(--navy);text-decoration:none;box-shadow:var(--shadow);transition:transform .1s,box-shadow .1s}
+.btn:hover{transform:translate(-1px,-1px)}
+.btn:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--navy)}
+.btn.main{background:var(--orange);color:#fff}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.mascot{width:min(260px,70%);justify-self:center;animation:float 3s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-10px) rotate(3deg)}}
+.wave{position:absolute;left:0;bottom:-1px;width:100%;height:70px;display:block}
+
+/* controls */
+.tools{padding-top:26px}
+.search{display:flex;gap:10px}
+.search input{flex:1;min-width:0;padding:12px 20px;border-radius:999px;border:3px solid var(--navy);background:#fff;font-size:1rem}
+.search input:focus{outline:none;box-shadow:0 0 0 4px #ffe3bd}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 6px}
+.chip{padding:7px 16px;border-radius:999px;border:2.5px solid var(--navy);background:#fff;font-size:.98rem}
+.chip:hover{background:#ffe3bd}
+.chip[aria-pressed="true"]{background:var(--navy);color:#fff}
+.count{margin:10px 0 14px;font-size:.95rem;opacity:.8}
+
+/* cards */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:20px}
+.card{position:relative;background:#fff;border:3px solid var(--navy);border-radius:18px;box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column;animation:in .3s ease both;transition:transform .15s,box-shadow .15s}
+.card:hover{transform:translate(-2px,-2px);box-shadow:7px 7px 0 var(--navy)}
+@keyframes in{from{opacity:0;transform:translateY(8px)}}
+.ph{position:relative;aspect-ratio:4/3;background:#ffe9c9;display:grid;place-items:center;font-size:3rem;overflow:hidden;border-bottom:3px solid var(--navy)}
+.ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ph.loading::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.6) 50%,transparent 70%);animation:sh 1.2s infinite}
+@keyframes sh{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
+.heart{position:absolute;top:10px;right:10px;z-index:2;width:38px;height:38px;border-radius:50%;border:3px solid var(--navy);background:#fff;font-size:1.1rem;line-height:1;color:var(--pink);transition:transform .15s}
+.heart:hover{transform:scale(1.12)}
+.heart.on{background:var(--pink);color:#fff}
+.heart.pulse{animation:bump .35s}
+.cbody{padding:12px 14px 14px;display:flex;flex-direction:column;gap:6px;flex:1}
+.cbody h3{font-weight:400;font-size:1.2rem}
+.tag{align-self:flex-start;font-size:.78rem;padding:1px 10px;border-radius:99px;background:#d9f2dd;border:2px solid var(--navy)}
+.unit{font-size:.88rem;opacity:.75}
+.desc{font-size:.92rem;opacity:.9}
+.buy{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:auto;padding-top:6px}
+.price{font-size:1.25rem;color:var(--orange-d)}
+.add{padding:7px 14px;border-radius:999px;border:3px solid var(--navy);background:var(--orange);color:#fff;box-shadow:2px 2px 0 var(--navy);font-size:.95rem}
+.add:active{transform:translate(2px,2px);box-shadow:none}
+.empty{grid-column:1/-1;text-align:center;padding:40px 16px;border:3px dashed var(--navy);border-radius:18px;background:#fff}
+.empty p{margin-bottom:12px}
+.sec{padding-top:64px}
+.sec h2{font-size:1.9rem;margin-bottom:4px}
+.sec .note{font-size:.92rem;opacity:.8;margin-bottom:14px}
+
+/* 3D map */
+.map-wrap{position:relative;height:min(68vh,560px);min-height:360px;border:3px solid var(--navy);border-radius:18px;box-shadow:var(--shadow);overflow:hidden;background:linear-gradient(#bfe6f5,#e9f6fb);touch-action:none}
+.map-wrap canvas{display:block;width:100%;height:100%;cursor:grab}
+.map-wrap canvas:active{cursor:grabbing}
+.labels{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.lab{position:absolute;left:0;top:0;pointer-events:auto;white-space:nowrap;padding:3px 10px;border-radius:99px;border:2.5px solid var(--navy);background:#fff;font-size:.85rem;box-shadow:2px 2px 0 var(--navy);transform:translate(-50%,-130%)}
+.lab:hover,.lab.sel{background:var(--orange);color:#fff}
+.map-msg{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:20px;pointer-events:none}
+.map-msg:empty{display:none}
+.map-tools{position:absolute;right:10px;top:10px;display:flex;gap:6px}
+.minfo{margin-top:12px;background:#fff;border:3px solid var(--navy);border-radius:16px;padding:12px 16px;font-size:.95rem}
+.minfo h3{font-weight:400;font-size:1.2rem;margin-bottom:2px}
+.minfo .btn{margin-top:8px;padding:6px 16px;box-shadow:2px 2px 0 var(--navy)}
+details.api{margin-top:12px;background:#fff;border:3px solid var(--navy);border-radius:16px;padding:10px 16px}
+details.api summary{cursor:pointer}
+details.api .search{margin:10px 0}
+
+footer{margin-top:70px;padding:26px 0 40px;border-top:3px solid var(--navy);font-size:.85rem;opacity:.85}
+
+/* drawer */
+.scrim{position:fixed;inset:0;background:rgba(15,59,87,.5);z-index:40;display:none}
+.scrim.open{display:block}
+.drawer{position:fixed;top:0;right:0;height:100%;width:min(420px,100%);z-index:41;background:var(--cream);border-left:3px solid var(--navy);display:flex;flex-direction:column;transform:translateX(105%);transition:transform .25s}
+.drawer.open{transform:none}
+.dh{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:3px solid var(--navy);font-size:1.3rem}
+.x{width:36px;height:36px;border-radius:50%;border:3px solid var(--navy);background:#fff}
+.items{flex:1;overflow:auto;padding:14px 18px;display:flex;flex-direction:column;gap:12px}
+.item{display:grid;grid-template-columns:64px 1fr;gap:10px;background:#fff;border:3px solid var(--navy);border-radius:14px;padding:8px}
+.item .th{position:relative;width:64px;height:64px;border-radius:10px;overflow:hidden;background:#ffe9c9;display:grid;place-items:center;font-size:1.8rem}
+.item .th img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.item b{font-weight:400}
+.irow{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-top:4px}
+.qty{display:inline-flex;align-items:center;border:2.5px solid var(--navy);border-radius:99px;overflow:hidden;background:#fff}
+.qty button{width:30px;height:30px;border:0;background:#ffe3bd;font-size:1.1rem}
+.qty button:disabled{opacity:.4;cursor:not-allowed}
+.qty span{min-width:34px;text-align:center}
+.del{border:0;background:none;text-decoration:underline;font-size:.88rem;color:#c0392b}
+.df{border-top:3px solid var(--navy);padding:14px 18px 18px;background:#fff}
+.total{display:flex;justify-content:space-between;font-size:1.3rem;margin-bottom:10px}
+.df .btn{width:100%;text-align:center}
+
+/* dialog */
+.dlg{position:fixed;inset:0;z-index:60;display:none;place-items:center;background:rgba(15,59,87,.55);padding:16px}
+.dlg.open{display:grid}
+.box{background:#fff;border:3px solid var(--navy);border-radius:22px;box-shadow:var(--shadow);padding:24px;width:min(380px,100%);text-align:center;animation:in .2s ease}
+.box h3{font-weight:400;font-size:1.5rem;margin-bottom:8px}
+.box .sum{margin:10px 0 14px;text-align:left;font-size:.92rem;max-height:140px;overflow:auto;background:var(--cream);border-radius:12px;padding:8px 12px}
+.box .big{font-size:1.6rem;color:var(--orange-d);margin-bottom:16px}
+.box .acts{display:flex;gap:10px;justify-content:center}
+.phbtn{all:unset;display:block;width:100%;cursor:zoom-in}
+.phbtn:focus-visible{outline:3px dashed var(--pink);outline-offset:-6px}
+.box.detail{width:min(460px,100%);padding:0;overflow:hidden;text-align:left;max-height:92vh;overflow-y:auto}
+.box.detail .ph{border-bottom:3px solid var(--navy)}
+.box.detail .dbody{padding:16px 20px 20px}
+.box.detail h3{margin:4px 0 6px}
+.box.detail .facts{display:grid;gap:8px;margin:12px 0 16px}
+.box.detail .facts div{background:var(--cream);border-radius:12px;padding:8px 12px;font-size:.95rem}
+.box.detail .facts small{display:block;opacity:.7;font-size:.78rem}
+.box.detail .acts{justify-content:space-between;align-items:center}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--navy);color:#fff;padding:9px 18px;border-radius:99px;z-index:70;opacity:0;pointer-events:none;transition:opacity .2s;font-size:.95rem}
+.toast.show{opacity:1}
+
+@media (max-width:640px){
+  .hero .wrap{grid-template-columns:1fr}.mascot{width:130px;order:-1;justify-self:start}
+  nav a.hide{display:none}
+  .grid{grid-template-columns:repeat(2,1fr);gap:12px}
+  .desc{display:none}.add{padding:6px 10px;font-size:.85rem}.price{font-size:1.05rem}
+  .brand{font-size:1rem}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="제주 먹거리 장터 홈">
+      <svg class="mini" viewBox="0 0 100 100" aria-hidden="true"><use href="#tang"/></svg>제주 먹거리 장터
+    </a>
+    <nav aria-label="주요 메뉴">
+      <a href="#shop" class="hide">먹거리</a>
+      <a href="#map" class="hide">3D 지도</a>
+      <a href="#wish">♥ 내 찜<span class="badge hb" id="wishN">0</span></a>
+      <button class="pill cart" id="cartBtn" aria-label="장바구니 열기">🛒 장바구니<span class="badge" id="cartN">0</span></button>
+    </nav>
+  </div>
+</header>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="tang" viewBox="0 0 100 100">
+      <path d="M50 22c-2-9 4-14 14-14-1 8-6 13-14 14z" fill="#4caf50" stroke="#0f3b57" stroke-width="3" stroke-linejoin="round"/>
+      <circle cx="50" cy="56" r="38" fill="#ff8a00" stroke="#0f3b57" stroke-width="3"/>
+      <ellipse cx="34" cy="38" rx="9" ry="5" fill="#ffc266" transform="rotate(-30 34 38)"/>
+    </symbol>
+  </defs>
+</svg>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <div class="eyebrow">JEJU · 제주 먹거리</div>
+        <h1>제주와 함께하는<br>먹거리 장보기</h1>
+        <p>감귤, 한라봉, 흑돼지, 갈치까지. 마음에 드는 먹거리는 ♥ 로 찜하고, 🛒 장바구니에 담아 보세요!</p>
+        <a class="btn main" href="#shop">먹거리 구경하기</a>
+        <a class="btn" href="#map">3D 지도 보기</a>
+      </div>
+      <svg class="mascot" viewBox="0 0 100 100" role="img" aria-label="귤"><use href="#tang"/></svg>
+    </div>
+    <svg class="wave" viewBox="0 0 1200 70" preserveAspectRatio="none" aria-hidden="true"><path d="M0 40C200 80 400 0 600 30s400 50 600 0V70H0z" fill="#fff8ec"/></svg>
+  </section>
+
+  <div class="wrap tools" id="shop">
+    <form class="search" id="sform" role="search">
+      <label class="sr-only" for="q">먹거리 검색</label>
+      <input id="q" type="search" placeholder="검색어를 입력하세요. 예: 감귤" autocomplete="off">
+      <button class="btn main" type="submit">검색</button>
+    </form>
+    <div class="chips" id="chips" role="group" aria-label="카테고리"></div>
+    <div class="count" id="count" aria-live="polite"></div>
+    <div class="grid" id="grid"></div>
+  </div>
+
+  <div class="wrap sec" id="map">
+    <h2>🗺 제주 3D 지도</h2>
+    <p class="note">드래그로 회전, 휠·핀치로 확대/축소, 라벨을 누르면 설명이 나와요. 한라산·오름·해안·풍력발전기·등대·돌하르방·항포구·감귤 재배지를 입체로 둘러보세요.</p>
+    <div class="chips" id="layerChips" role="group" aria-label="지도 표시 항목"></div>
+    <div class="map-wrap" id="map3d">
+      <div class="labels" id="labels"></div>
+      <div class="map-msg" id="mapMsg">3D 지도를 불러오는 중…</div>
+      <div class="map-tools">
+        <button class="chip" id="rotBtn" aria-pressed="false">자동 회전</button>
+        <button class="chip" id="resetBtn">처음 위치</button>
+      </div>
+    </div>
+    <div class="minfo" id="minfo" aria-live="polite"><b>지도의 라벨을 눌러 보세요.</b> 지형과 위치는 이해를 돕기 위한 단순화된 모델이며, 모델 크기는 과장되어 있어요.</div>
+    <details class="api">
+      <summary>공공데이터포털(odcloud) 데이터 불러오기 (선택)</summary>
+      <p class="unit">공공데이터포털에서 발급받은 인증키(Decoding 키)를 넣으면 해당 API(15125100)의 데이터 중 위·경도가 있는 항목을 지도에 핀으로 추가해요. 키는 저장하지 않고 이 브라우저에서만 사용해요. 키 없이도 지도는 정상 동작해요.</p>
+      <form class="search" id="apiForm"><label class="sr-only" for="apiKey">인증키</label><input id="apiKey" type="password" placeholder="공공데이터포털 인증키" autocomplete="off"><button class="btn main" type="submit">불러오기</button></form>
+      <div class="unit" id="apiMsg" role="status"></div>
+    </details>
+  </div>
+
+  <div class="wrap sec" id="wish">
+    <h2>♥ 내 찜</h2>
+    <p class="note">로그인 없이 쓰는 서비스라 찜·장바구니는 이 브라우저에만 저장돼요.</p>
+    <div class="grid" id="wGrid"></div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    이 사이트는 연습용 데모예요. 표시된 가격은 예시이며 실제 판매·결제는 이루어지지 않아요. 사진: Wikimedia Commons (일부는 같은 종류의 일반 사진으로 제주 현지 사진이 아닐 수 있어요). 3D 지도의 지형은 단순화한 모델이고 장소 위치는 대략적인 값이에요.
+  </div>
+</footer>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-label="장바구니" aria-hidden="true">
+  <div class="dh"><span>🛒 장바구니</span><button class="x" id="cartX" aria-label="장바구니 닫기">✕</button></div>
+  <div class="items" id="items"></div>
+  <div class="df">
+    <div class="total"><span>합계</span><b id="total">0원</b></div>
+    <button class="btn main" id="buyBtn">구매하기</button>
+  </div>
+</aside>
+
+<div class="dlg" id="dlg" role="dialog" aria-modal="true" aria-labelledby="dTitle"><div class="box" id="box"></div></div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+/* ===== 이미지 (Wikimedia Commons) ===== */
+const commons=(f,w=700)=>`https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(f.replace(/ /g,"_"))}?width=${w}`;
+
+/* ===== 상품 데이터 (가격은 연습용 예시) ===== */
+const CATS=[{id:"all",label:"🏝 전체"},{id:"fruit",label:"🍊 과일"},{id:"seafood",label:"🐟 해산물"},{id:"agriculture",label:"🥬 농산물"},{id:"processed",label:"🍪 가공식품"},{id:"local-food",label:"🍲 향토음식"}];
+const CAT_LABEL={fruit:"과일",seafood:"해산물",agriculture:"농산물",processed:"가공식품","local-food":"향토음식"};
+const PRODUCTS=[
+ {id:"gamgyul",name:"감귤",emoji:"🍊",category:"fruit",unit:"5kg 박스",price:15000,desc:"새콤달콤한 제주 대표 과일.",img:commons("Tangerine tree.jpg")},
+ {id:"hallabong",name:"한라봉",emoji:"🍊",category:"fruit",unit:"3kg 박스",price:24000,desc:"꼭지가 볼록 솟은 큼직한 만감류.",img:commons("Dekopon.jpg")},
+ {id:"cheonhyehyang",name:"천혜향",emoji:"🍊",category:"fruit",unit:"3kg 박스",price:27000,desc:"향이 진하고 껍질이 얇은 만감류.",img:commons("Jeju cheonhyehyang 1.jpg")},
+ {id:"redhyang",name:"레드향",emoji:"🍊",category:"fruit",unit:"3kg 박스",price:26000,desc:"붉은 껍질과 진한 단맛의 만감류.",img:commons("Kanpei1.jpg")},
+ {id:"heukdwaeji",name:"제주 흑돼지",emoji:"🐖",category:"local-food",unit:"구이용 600g",price:32000,desc:"쫄깃하고 고소한 향토음식.",img:commons("Korean BBQ.jpg")},
+ {id:"galchi",name:"갈치",emoji:"🐟",category:"seafood",unit:"3마리 세트",price:38000,desc:"은빛 몸통의 제주 대표 생선.",img:commons("Galchi-gui.jpg")},
+ {id:"okdom",name:"옥돔",emoji:"🐠",category:"seafood",unit:"2마리 세트",price:35000,desc:"담백하고 부드러운 살의 생선.",img:commons("Korean cuisine-Jeju Island-Okdom gui-Grilled Tilefish-01.jpg")},
+ {id:"jeonbok",name:"전복",emoji:"🐚",category:"seafood",unit:"500g",price:29000,desc:"쫀득한 식감의 제주 바다 해산물.",img:commons("Jeonbok-hoe-muchim 1.jpg")},
+ {id:"hanchi",name:"한치",emoji:"🦑",category:"seafood",unit:"3마리 세트",price:21000,desc:"부드럽고 달큰한 오징어류.",img:commons("Squid sashimi (26498395600).jpg")},
+ {id:"jari",name:"자리돔",emoji:"🐟",category:"seafood",unit:"1kg",price:18000,desc:"뼈째 썰어 먹는 자리물회의 주인공.",img:commons("Korean cuisine-Jeju-Jari mulhoe-Sliced raw damselfish with spicy sauce-01.jpg")},
+ {id:"carrot",name:"제주 당근",emoji:"🥕",category:"agriculture",unit:"3kg 박스",price:12000,desc:"달큰해서 주스·샐러드로 인기.",img:commons("Carrots farm.jpg")},
+ {id:"memil",name:"메밀(빙떡 재료)",emoji:"🌾",category:"agriculture",unit:"1kg",price:9000,desc:"국수·빙떡·묵에 쓰이는 곡물.",img:commons("Korean cuisine-Jeju Island-Bingtteok-01.jpg")},
+ {id:"gosari",name:"고사리",emoji:"🌿",category:"agriculture",unit:"200g",price:11000,desc:"들판에서 자라는 봄나물.",img:commons("Pteridium aquilinum (northern bracken fern) 2024-06-25.jpg")},
+ {id:"omegi",name:"오메기떡",emoji:"🍡",category:"processed",unit:"12개입",price:16000,desc:"차조로 만든 쫀득한 제주 전통 떡.",img:commons("Omegi-tteok preparation.jpg")}
+];
+
+/* 상세 설명 (일반적인 참고 정보 · 제철은 해마다/품종마다 다를 수 있음) */
+const DETAIL={
+ gamgyul:{why:"따뜻한 기후와 화산 토양에서 오랫동안 재배되어 제주의 상징이 된 과일이에요.",season:"대체로 늦가을~겨울 (노지 감귤 기준)"},
+ hallabong:{why:"한라산에서 이름을 딴 제주 대표 만감류로, 꼭지 쪽이 볼록한 모양이 특징이에요.",season:"대체로 겨울~봄"},
+ cheonhyehyang:{why:"‘하늘이 내린 향기’라는 뜻의 이름처럼 향이 매력적인 만감류예요.",season:"대체로 겨울~초봄"},
+ redhyang:{why:"붉은빛 껍질과 진한 단맛이 특징인, 제주에서 재배되는 대표 만감류예요.",season:"대체로 겨울~초봄"},
+ heukdwaeji:{why:"제주 재래 흑돼지 문화에서 이어진 음식으로, 쫄깃하고 고소한 맛 때문에 여행객이 꼭 찾는 메뉴예요.",season:"연중"},
+ galchi:{why:"구이·조림·국으로 즐기는, 제주 연안 어업을 대표하는 생선이에요.",season:"대체로 여름~가을이 제철로 알려져 있어요"},
+ okdom:{why:"담백한 살 덕분에 제주 전통 상차림에 많이 쓰여온 생선이에요.",season:"연중 (겨울 무렵 맛이 좋다고 알려져 있어요)"},
+ jeonbok:{why:"해녀가 채취해 온 역사가 있는, 제주 바다를 대표하는 먹거리예요.",season:"연중 (조리법에 따라 선호 시기가 달라요)"},
+ hanchi:{why:"제주 여름 바다를 대표하는 해산물로 회나 물회로 즐겨요.",season:"대체로 여름"},
+ jari:{why:"제주 바다의 대표 여름 생선으로, 뼈째 썰어 먹는 자리물회가 유명해요.",season:"대체로 늦봄~여름"},
+ carrot:{why:"겨울에도 비교적 따뜻한 제주에서 많이 재배되는 농산물이에요.",season:"대체로 겨울~봄"},
+ memil:{why:"척박한 화산 토양에서도 잘 자라 빙떡·국수 등 제주 전통 음식의 바탕이 되었어요.",season:"대체로 가을 수확"},
+ gosari:{why:"봄철 제주 들판에서 채취해 육개장 등 향토음식에 쓰는 나물이에요.",season:"대체로 봄"},
+ omegi:{why:"제주 전통 곡물인 차조로 만든 떡으로, 선물용으로도 인기가 많아요.",season:"연중"}
+};
+
+/* ===== 상태 (localStorage 접근 실패 대비) ===== */
+const LS_W="jeju-food:wish:v1", LS_C="jeju-food:cart:v1";
+const read=(k,d)=>{try{const v=JSON.parse(localStorage.getItem(k));return v&&typeof v==="object"?v:d;}catch(e){return d;}};
+const write=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}};
+const st={cat:"all",q:"",wish:read(LS_W,[]),cart:read(LS_C,{})}; // wish: id[], cart: {id:qty}
+const MAXQ=99;
+if(!Array.isArray(st.wish)) st.wish=[];
+st.wish=[...new Set(st.wish.filter(id=>PRODUCTS.some(p=>p.id===id)))];
+if(Array.isArray(st.cart)) st.cart={};
+for(const id of Object.keys(st.cart)){ const n=Math.floor(Number(st.cart[id])); if(!PRODUCTS.some(p=>p.id===id)||!(n>0)) delete st.cart[id]; else st.cart[id]=Math.min(n,MAXQ); }
+
+/* ===== 유틸 ===== */
+const $=s=>document.querySelector(s);
+const esc=t=>String(t).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const won=n=>n.toLocaleString("ko-KR")+"원";
+const byId=id=>PRODUCTS.find(p=>p.id===id);
+let tt; function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");clearTimeout(tt);tt=setTimeout(()=>t.classList.remove("show"),1700);}
+function photo(p,cls="ph"){
+  return `<div class="${cls}${cls==="ph"?" loading":""}"><span aria-hidden="true">${p.emoji}</span><img src="${esc(p.img)}" alt="${esc(p.name)} 사진" loading="lazy" referrerpolicy="no-referrer" data-img></div>`;
+}
+document.addEventListener("load",e=>{if(e.target.dataset&&"img" in e.target.dataset)e.target.parentNode.classList.remove("loading");},true);
+document.addEventListener("error",e=>{if(e.target.dataset&&"img" in e.target.dataset){const p=e.target.parentNode;e.target.remove();p.classList.remove("loading");}},true);
+
+/* ===== 장바구니 로직 ===== */
+const cartEntries=()=>Object.keys(st.cart).map(id=>({p:byId(id),qty:st.cart[id]}));
+const cartCount=()=>cartEntries().reduce((s,e)=>s+e.qty,0);
+const cartTotal=()=>cartEntries().reduce((s,e)=>s+e.p.price*e.qty,0);
+function saveCart(){write(LS_C,st.cart);}
+function addToCart(id){
+  const p=byId(id); if(!p) return;
+  if((st.cart[id]||0)>=MAXQ){toast(`한 상품은 최대 ${MAXQ}개까지 담을 수 있어요`);return;}
+  st.cart[id]=(st.cart[id]||0)+1; saveCart(); renderCart(true); toast(`🛒 ${p.name}을(를) 담았어요`);
+}
+function changeQty(id,d){
+  if(!st.cart[id]) return;
+  const n=st.cart[id]+d;
+  if(n<1||n>MAXQ) return;
+  st.cart[id]=n; saveCart(); renderCart();
+}
+function removeItem(id){ delete st.cart[id]; saveCart(); renderCart(); }
+
+function renderCart(bump){
+  const n=cartCount(); const b=$("#cartN"); b.textContent=n;
+  if(bump){b.classList.remove("bump");void b.offsetWidth;b.classList.add("bump");}
+  const es=cartEntries();
+  $("#items").innerHTML=es.length?es.map(({p,qty})=>`<div class="item">
+      ${photo(p,"th")}
+      <div><b>${esc(p.name)}</b> <span class="unit">${esc(p.unit)}</span>
+        <div class="unit">개당 ${won(p.price)}</div>
+        <div class="irow">
+          <span class="qty" role="group" aria-label="${esc(p.name)} 수량">
+            <button data-dec="${p.id}" aria-label="수량 줄이기" ${qty<=1?"disabled":""}>−</button><span aria-live="polite">${qty}</span><button data-inc="${p.id}" aria-label="수량 늘리기" ${qty>=MAXQ?"disabled":""}>＋</button>
+          </span>
+          <b>${won(p.price*qty)}</b>
+        </div>
+        <button class="del" data-del="${p.id}" aria-label="${esc(p.name)} 삭제">삭제</button>
+      </div></div>`).join(""):`<div class="empty"><p>장바구니가 비어 있어요 🍊</p><button class="btn main" data-closecart>먹거리 구경하기</button></div>`;
+  $("#total").textContent=won(cartTotal());
+  $("#buyBtn").disabled=!es.length;
+}
+function openCart(o){
+  $("#drawer").classList.toggle("open",o); $("#scrim").classList.toggle("open",o);
+  $("#drawer").setAttribute("aria-hidden",!o);
+  document.body.style.overflow=o?"hidden":"";
+  if(o) $("#cartX").focus(); else $("#cartBtn").focus();
+}
+
+/* ===== 구매 흐름 (결제 없음: 확인 → 완료) ===== */
+function openDlg(html){ $("#box").innerHTML=html; $("#dlg").classList.add("open"); const f=$("#box button"); if(f) f.focus(); }
+function closeDlg(){ $("#dlg").classList.remove("open"); $("#box").classList.remove("detail"); }
+function openDetail(id){
+  const p=byId(id), d=DETAIL[id]||{}; if(!p) return;
+  openDlg(`${photo(p)}<div class="dbody"><span class="tag">${CAT_LABEL[p.category]}</span>
+    <h3 id="dTitle">${esc(p.name)}</h3><p>${esc(p.desc)}</p>
+    <div class="facts">
+      ${d.why?`<div><small>제주에서 유명한 이유</small>${esc(d.why)}</div>`:""}
+      ${d.season?`<div><small>제철·추천 시기</small>${esc(d.season)} <span class="unit">(해마다·품종마다 다를 수 있어요)</span></div>`:""}
+      <div><small>판매 단위 · 예시 가격</small>${esc(p.unit)} · ${won(p.price)}</div>
+    </div>
+    <div class="acts"><button class="btn" data-done>닫기</button><button class="btn main" data-add="${p.id}">🛒 담기</button></div></div>`);
+  $("#box").classList.add("detail");
+}
+function askBuy(){
+  const es=cartEntries(); if(!es.length) return;
+  const sum=es.map(({p,qty})=>`${esc(p.name)} × ${qty} = ${won(p.price*qty)}`).join("<br>");
+  $("#box").classList.remove("detail");
+  openDlg(`<h3 id="dTitle">구매하시겠습니까?</h3>
+    <div class="sum">${sum}</div>
+    <div class="big">총 ${won(cartTotal())}</div>
+    <div class="acts"><button class="btn" data-no>취소</button><button class="btn main" data-yes>확인</button></div>`);
+}
+function completeBuy(){
+  const total=cartTotal(), n=cartCount();
+  st.cart={}; saveCart(); renderCart(); openCart(false);
+  openDlg(`<h3 id="dTitle">구매가 완료되었습니다! 🎉</h3>
+    <p>${n}개 상품, 총 ${won(total)}</p>
+    <p class="unit" style="margin:8px 0 16px">연습용 데모라 실제 결제와 배송은 이루어지지 않아요.</p>
+    <div class="acts"><button class="btn main" data-done>닫기</button></div>`);
+}
+
+/* ===== 찜 ===== */
+function toggleWish(id){
+  const i=st.wish.indexOf(id), p=byId(id); if(!p) return;
+  if(i>=0) st.wish.splice(i,1); else st.wish.push(id);
+  write(LS_W,st.wish); toast(i>=0?`${p.name} 찜을 해제했어요`:`♥ ${p.name}을(를) 찜했어요`);
+  renderShop(id);
+}
+
+/* ===== 렌더 ===== */
+function card(p){
+  const on=st.wish.includes(p.id);
+  return `<article class="card">
+    <button class="heart${on?" on":""}" data-heart="${p.id}" aria-pressed="${on}" aria-label="${esc(p.name)} ${on?"찜 해제":"찜하기"}">${on?"♥":"♡"}</button>
+    <button class="phbtn" data-open="${p.id}" aria-label="${esc(p.name)} 설명 보기">${photo(p)}</button>
+    <div class="cbody"><h3>${esc(p.name)}</h3><span class="tag">${CAT_LABEL[p.category]}</span>
+      <div class="desc">${esc(p.desc)}</div><div class="unit">${esc(p.unit)}</div>
+      <div class="buy"><span class="price">${won(p.price)}</span><button class="add" data-add="${p.id}" aria-label="${esc(p.name)} 장바구니에 담기">🛒 담기</button></div>
+    </div></article>`;
+}
+function renderChips(){ $("#chips").innerHTML=CATS.map(c=>`<button class="chip" data-cat="${c.id}" aria-pressed="${st.cat===c.id}">${c.label}</button>`).join(""); }
+function renderShop(pulse){
+  const q=st.q.trim().toLowerCase();
+  const l=PRODUCTS.filter(p=>(st.cat==="all"||p.category===st.cat)&&p.name.toLowerCase().includes(q));
+  $("#count").textContent=`${l.length}개의 먹거리`;
+  $("#grid").innerHTML=l.length?l.map(card).join(""):`<div class="empty"><p>조건에 맞는 먹거리가 없습니다.</p><button class="btn main" data-reset>검색 초기화</button></div>`;
+  const w=st.wish.map(byId).filter(Boolean).sort((a,b)=>a.name.localeCompare(b.name,"ko"));
+  $("#wGrid").innerHTML=w.length?w.map(card).join(""):`<div class="empty"><p>아직 찜한 먹거리가 없어요. ♡를 눌러 담아 보세요!</p></div>`;
+  $("#wishN").textContent=st.wish.length;
+  if(pulse) document.querySelectorAll(`[data-heart="${pulse}"]`).forEach(b=>b.classList.add("pulse"));
+}
+
+/* ===== 이벤트 ===== */
+document.addEventListener("click",e=>{
+  const t=e.target, g=s=>t.closest(s);
+  let el;
+  if(el=g("[data-heart]")) return toggleWish(el.dataset.heart);
+  if(el=g("[data-open]")) return openDetail(el.dataset.open);
+  if(el=g("[data-add]")) return addToCart(el.dataset.add);
+  if(el=g("[data-cat]")){ st.cat=el.dataset.cat; renderChips(); return renderShop(); }
+  if(g("[data-reset]")){ st.q="";st.cat="all";$("#q").value="";renderChips();return renderShop(); }
+  if(el=g("[data-inc]")) return changeQty(el.dataset.inc,1);
+  if(el=g("[data-dec]")) return changeQty(el.dataset.dec,-1);
+  if(el=g("[data-del]")) return removeItem(el.dataset.del);
+  if(g("[data-closecart]")){ openCart(false); return $("#shop").scrollIntoView(); }
+  if(g("[data-yes]")) return completeBuy();
+  if(g("[data-no]")||g("[data-done]")||t===$("#dlg")) return closeDlg();
+});
+$("#cartBtn").addEventListener("click",()=>openCart(true));
+$("#cartX").addEventListener("click",()=>openCart(false));
+$("#scrim").addEventListener("click",()=>openCart(false));
+$("#buyBtn").addEventListener("click",askBuy);
+document.addEventListener("keydown",e=>{ if(e.key==="Escape"){ if($("#dlg").classList.contains("open")) closeDlg(); else if($("#drawer").classList.contains("open")) openCart(false); } });
+$("#q").addEventListener("input",e=>{st.q=e.target.value;renderShop();});
+$("#sform").addEventListener("submit",e=>{e.preventDefault();st.q=$("#q").value;renderShop();$("#grid").scrollIntoView({block:"start"});});
+
+/* 3D 지도에서 '먹거리 보기' 요청 */
+document.addEventListener("map-food",e=>{ st.cat=e.detail; renderChips(); renderShop(); $("#shop").scrollIntoView(); });
+
+/* ===== 시작 ===== */
+renderChips(); renderShop(); renderCart();
+</script>
+
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+<script type="module">
+/* ===== 제주 3D 지도 (three.js / WebGL) ===== */
+const box=document.getElementById("map3d"), msg=document.getElementById("mapMsg"), info=document.getElementById("minfo");
+try{
+  const THREE=await import("three");
+  const {OrbitControls}=await import("three/addons/controls/OrbitControls.js");
+  initMap(THREE,OrbitControls);
+}catch(err){
+  msg.textContent="3D 지도를 불러오지 못했어요. 인터넷 연결과 WebGL 지원 브라우저인지 확인해 주세요. (먹거리 장보기는 그대로 사용할 수 있어요.)";
+}
+
+function initMap(THREE,OrbitControls){
+  const LON0=126.55, LAT0=33.38, EX=2.4;
+  const toXZ=(lat,lon)=>({x:(lon-LON0)*93, z:-(lat-LAT0)*111}); // km 근사 변환
+  const rnd=(s=>()=>{s|=0;s=s+0x6D2B79F5|0;let t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;})(7);
+
+  /* --- 마커 데이터 (위치는 대략적인 값) --- */
+  const LAYERS={
+    mountain:{label:"🌋 산·오름",color:0x7a6a50},
+    wind:{label:"🌬 풍력발전",color:0xffffff},
+    lighthouse:{label:"🗼 등대",color:0xe74c3c},
+    statue:{label:"🗿 돌하르방",color:0x8c8c8c},
+    port:{label:"⚓ 항·포구",color:0x1a8bb5},
+    citrus:{label:"🍊 감귤 재배지",color:0xff8a00},
+    olle:{label:"🥾 올레길",color:0x4caf50},
+    api:{label:"📍 공공데이터",color:0xff4f81}
+  };
+  const MARKS=[
+    {l:"mountain",n:"한라산",lat:33.3617,lon:126.5292,d:"제주 한가운데 솟은 최고봉(해발 약 1,947m)이에요."},
+    {l:"mountain",n:"성산일출봉",lat:33.4580,lon:126.9425,d:"바다에서 솟은 화산체로 일출 명소로 유명해요. (해발 약 182m)"},
+    {l:"mountain",n:"산방산",lat:33.2397,lon:126.3144,d:"제주 남서쪽 해안에 우뚝 솟은 종 모양의 산이에요."},
+    {l:"mountain",n:"새별오름",lat:33.3656,lon:126.3570,d:"제주의 대표적인 오름 중 하나예요."},
+    {l:"mountain",n:"다랑쉬오름",lat:33.4800,lon:126.8000,d:"동쪽 중산간에 있는 오름이에요."},
+    {l:"wind",n:"행원 풍력발전단지 일대",lat:33.5550,lon:126.8000,d:"북동쪽 해안가 풍력발전 지대예요. (대략적 위치)"},
+    {l:"wind",n:"한경 풍력발전단지 일대",lat:33.3300,lon:126.1900,d:"서쪽 해안가 풍력발전 지대예요. (대략적 위치)"},
+    {l:"wind",n:"가시리 일대 풍력발전기",lat:33.3600,lon:126.7000,d:"동쪽 중산간의 풍력발전 지대예요. (대략적 위치)"},
+    {l:"lighthouse",n:"도두 무지개등대",lat:33.5140,lon:126.4650,d:"제주시 도두항 인근의 알록달록한 등대예요."},
+    {l:"lighthouse",n:"이호테우 말등대",lat:33.4970,lon:126.4530,d:"말 모양의 등대로 유명한 해변이에요."},
+    {l:"statue",n:"제주시 돌하르방 (제주목 관아 일대)",lat:33.5136,lon:126.5262,d:"제주를 상징하는 돌하르방을 만날 수 있는 곳이에요. (대략적 위치)"},
+    {l:"port",n:"성산포항",lat:33.4735,lon:126.9330,d:"우도로 가는 배가 오가는 항구예요."},
+    {l:"port",n:"모슬포항",lat:33.2150,lon:126.2530,d:"남서쪽의 대표 항구예요."},
+    {l:"port",n:"서귀포항",lat:33.2400,lon:126.5650,d:"남쪽 바다에 면한 항구예요."},
+    {l:"citrus",n:"서귀포 일대 감귤 재배지",lat:33.3000,lon:126.5500,d:"서귀포 지역은 감귤 주산지로 알려져 있어요. (대략적 위치)",food:"fruit"},
+    {l:"citrus",n:"효돈 일대 감귤 재배지",lat:33.2850,lon:126.6200,d:"남쪽 사면의 감귤 재배 지대예요. (대략적 위치)",food:"fruit"},
+    {l:"citrus",n:"남원 일대 감귤 재배지",lat:33.2900,lon:126.7100,d:"남동쪽 감귤 재배 지대예요. (대략적 위치)",food:"fruit"},
+    {l:"olle",n:"올레길 (성산 일대)",lat:33.4610,lon:126.9330,d:"성산 일대를 걷는 올레길 구간이에요. (대략적 위치)"}
+  ];
+
+  /* --- 지형 모델 (실제 해안선이 아닌 단순화 모델) --- */
+  const A=39,B=15.5,ca=Math.cos(-0.2),sa=Math.sin(-0.2);
+  const sstep=(a,b,x)=>{const t=Math.min(1,Math.max(0,(x-a)/(b-a)));return t*t*(3-2*t);};
+  const shape=(x,z)=>{const u=x*ca+z*sa,v=-x*sa+z*ca,th=Math.atan2(v/B,u/A);let r=Math.hypot(u/A,v/B);r*=1+0.05*Math.sin(3*th+1)+0.035*Math.sin(5*th+2)+0.02*Math.sin(9*th);return 1-r;};
+  const hl=toXZ(33.3617,126.5292);
+  const BUMPS=[[hl.x,hl.z,1.0,6.5,5.2],[hl.x,hl.z,0.35,16,9]];
+  MARKS.filter(m=>m.l==="mountain"&&m.n!=="한라산").forEach(m=>{const p=toXZ(m.lat,m.lon);BUMPS.push([p.x,p.z,m.n==="산방산"?0.5:m.n==="성산일출봉"?0.3:0.18,m.n==="산방산"?1.4:1.6,m.n==="산방산"?1.4:1.6]);});
+  for(let i=0,n=0;n<26&&i<400;i++){const x=(rnd()-.5)*66,z=(rnd()-.5)*26;if(shape(x,z)>0.2&&Math.hypot(x-hl.x,z-hl.z)>9){BUMPS.push([x,z,0.07+rnd()*0.14,1+rnd()*1.1,1+rnd()*1.1]);n++;}}
+  function heightAt(x,z){
+    const s=shape(x,z),land=sstep(0,0.07,s);
+    let e=0.12+0.55*sstep(0,0.6,s);
+    for(const [bx,bz,h,sx,sz] of BUMPS) e+=h*Math.exp(-(((x-bx)/sx)**2+((z-bz)/sz)**2));
+    return -0.35*(1-land)+land*e*EX;
+  }
+
+  /* --- 렌더러/씬 --- */
+  const renderer=new THREE.WebGLRenderer({antialias:true,alpha:true});
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  box.prepend(renderer.domElement);
+  renderer.domElement.setAttribute("aria-label","제주 3D 입체 지도");
+  const scene=new THREE.Scene();
+  const camera=new THREE.PerspectiveCamera(40,1,0.5,400);
+  const HOME={pos:new THREE.Vector3(0,42,58),target:new THREE.Vector3(0,0,0)};
+  camera.position.copy(HOME.pos);
+  const controls=new OrbitControls(camera,renderer.domElement);
+  controls.enableDamping=true; controls.minDistance=14; controls.maxDistance=120; controls.maxPolarAngle=1.45;
+  controls.target.copy(HOME.target); controls.autoRotateSpeed=0.8;
+  scene.add(new THREE.HemisphereLight(0xffffff,0x6aa0b5,1.0));
+  const sun=new THREE.DirectionalLight(0xfff0d8,1.6); sun.position.set(-30,50,20); scene.add(sun);
+
+  const sea=new THREE.Mesh(new THREE.PlaneGeometry(220,140),new THREE.MeshLambertMaterial({color:0x2f9ccb,transparent:true,opacity:.9}));
+  sea.rotation.x=-Math.PI/2; scene.add(sea);
+
+  const geo=new THREE.PlaneGeometry(100,56,220,124); geo.rotateX(-Math.PI/2);
+  const pos=geo.attributes.position, col=new Float32Array(pos.count*3), c=new THREE.Color();
+  for(let i=0;i<pos.count;i++){
+    const x=pos.getX(i),z=pos.getZ(i),h=heightAt(x,z); pos.setY(i,h);
+    const k=h/EX;
+    if(h<-0.05) c.set(0x3a8fb8); else if(h<0.06) c.set(0xe8d9a8); else if(k<0.28) c.set(0x9ccf6a); else if(k<0.8) c.set(0x5fa352); else if(k<1.4) c.set(0x8a7a55); else c.set(0xd9d4c8);
+    col.set([c.r,c.g,c.b],i*3);
+  }
+  geo.setAttribute("color",new THREE.BufferAttribute(col,3)); geo.computeVertexNormals();
+  scene.add(new THREE.Mesh(geo,new THREE.MeshLambertMaterial({vertexColors:true})));
+
+  /* --- 마커 오브젝트 (크기는 보기 쉽게 과장) --- */
+  const M=(color)=>new THREE.MeshLambertMaterial({color});
+  const groups={}, labelsEl=document.getElementById("labels"), items=[], spinners=[];
+  Object.keys(LAYERS).forEach(k=>{groups[k]=new THREE.Group();scene.add(groups[k]);});
+  function build(layer,x,y,z){
+    const g=new THREE.Group(); g.position.set(x,y,z);
+    if(layer==="wind"){
+      const t=new THREE.Mesh(new THREE.CylinderGeometry(.06,.1,1.7,8),M(0xf4f4f4)); t.position.y=.85; g.add(t);
+      const rot=new THREE.Group(); rot.position.set(0,1.7,.1);
+      for(let i=0;i<3;i++){const b=new THREE.Mesh(new THREE.BoxGeometry(.07,.9,.02),M(0xffffff));b.position.y=.45;const p=new THREE.Group();p.rotation.z=i*2.094;p.add(b);rot.add(p);}
+      g.add(rot); spinners.push(rot);
+    }else if(layer==="lighthouse"){
+      const a=new THREE.Mesh(new THREE.CylinderGeometry(.18,.28,1.1,12),M(0xffffff)); a.position.y=.55; g.add(a);
+      const b=new THREE.Mesh(new THREE.CylinderGeometry(.3,.2,.25,12),M(0xe74c3c)); b.position.y=1.2; g.add(b);
+      const t=new THREE.Mesh(new THREE.ConeGeometry(.3,.35,12),M(0xe74c3c)); t.position.y=1.5; g.add(t);
+    }else if(layer==="statue"){
+      const b=new THREE.Mesh(new THREE.CylinderGeometry(.22,.3,.8,10),M(0x8c8c8c)); b.position.y=.4; g.add(b);
+      const h=new THREE.Mesh(new THREE.SphereGeometry(.26,12,10),M(0x9a9a9a)); h.position.y=1; g.add(h);
+      const hat=new THREE.Mesh(new THREE.CylinderGeometry(.18,.22,.2,10),M(0x777777)); hat.position.y=1.28; g.add(hat);
+    }else if(layer==="port"){
+      const b=new THREE.Mesh(new THREE.BoxGeometry(.9,.18,.5),M(0xb08a55)); b.position.y=.1; g.add(b);
+      const s=new THREE.Mesh(new THREE.ConeGeometry(.2,.5,3),M(0x1a8bb5)); s.position.set(0,.42,0); g.add(s);
+    }else if(layer==="citrus"){
+      for(let i=0;i<16;i++){const a=rnd()*6.283,r=Math.sqrt(rnd())*2.2,px=Math.cos(a)*r,pz=Math.sin(a)*r;
+        const tree=new THREE.Group(); const gy=heightAt(x+px,z+pz)-y;
+        const trunk=new THREE.Mesh(new THREE.CylinderGeometry(.03,.04,.25,6),M(0x6b4a2b)); trunk.position.y=.12;
+        const crown=new THREE.Mesh(new THREE.SphereGeometry(.22,10,8),M(0x3f9a4b)); crown.position.y=.38;
+        const fruit=new THREE.Mesh(new THREE.SphereGeometry(.07,8,6),M(0xff8a00)); fruit.position.set(.12,.4,.12);
+        tree.add(trunk,crown,fruit); tree.position.set(px,Math.max(gy,-.05),pz); g.add(tree);}
+    }else{
+      const p=new THREE.Mesh(new THREE.ConeGeometry(.2,.7,8),M(LAYERS[layer].color)); p.rotation.x=Math.PI; p.position.y=.45; g.add(p);
+    }
+    return g;
+  }
+  let fly=null;
+  function addMarker(m){
+    const p=toXZ(m.lat,m.lon), y=Math.max(heightAt(p.x,p.z),0.05);
+    groups[m.l].add(build(m.l,p.x,y,p.z));
+    const b=document.createElement("button"); b.className="lab"; b.type="button";
+    b.textContent=LAYERS[m.l].label.split(" ")[0]+" "+m.n; b.setAttribute("aria-label",m.n+" 설명 보기");
+    labelsEl.appendChild(b);
+    const it={m,b,v:new THREE.Vector3(p.x,y+1.4,p.z),layer:m.l}; items.push(it);
+    b.addEventListener("click",()=>select(it));
+  }
+  MARKS.forEach(addMarker);
+
+  function select(it){
+    items.forEach(i=>i.b.classList.toggle("sel",i===it));
+    info.textContent="";
+    const h=document.createElement("h3"); h.textContent=it.m.n; info.appendChild(h);
+    const p=document.createElement("div"); p.textContent=it.m.d||""; info.appendChild(p);
+    if(it.m.extra){ const e=document.createElement("div"); e.className="unit"; e.textContent=it.m.extra; info.appendChild(e); }
+    if(it.m.food){ const bt=document.createElement("button"); bt.className="btn main"; bt.type="button"; bt.textContent="🍊 과일 먹거리 보기";
+      bt.addEventListener("click",()=>document.dispatchEvent(new CustomEvent("map-food",{detail:it.m.food}))); info.appendChild(bt); }
+    fly=new THREE.Vector3(it.v.x,0,it.v.z);
+  }
+
+  /* --- 레이어 토글 / 도구 --- */
+  const visible={}; Object.keys(LAYERS).forEach(k=>visible[k]=true);
+  const chips=document.getElementById("layerChips");
+  function chipsRender(){
+    chips.innerHTML="";
+    Object.keys(LAYERS).forEach(k=>{
+      if(k==="api"&&!items.some(i=>i.layer==="api")) return;
+      const b=document.createElement("button"); b.className="chip"; b.type="button"; b.textContent=LAYERS[k].label; b.setAttribute("aria-pressed",visible[k]);
+      b.addEventListener("click",()=>{visible[k]=!visible[k];groups[k].visible=visible[k];chipsRender();});
+      chips.appendChild(b);
+    });
+  }
+  chipsRender();
+  const rotBtn=document.getElementById("rotBtn");
+  rotBtn.addEventListener("click",()=>{controls.autoRotate=!controls.autoRotate;rotBtn.setAttribute("aria-pressed",controls.autoRotate);});
+  document.getElementById("resetBtn").addEventListener("click",()=>{camera.position.copy(HOME.pos);controls.target.copy(HOME.target);fly=null;controls.autoRotate=false;rotBtn.setAttribute("aria-pressed","false");});
+
+  /* --- 공공데이터포털 API (키가 있을 때만 동작) --- */
+  const API="https://api.odcloud.kr/api/15125100/v1/uddi:32a1b877-af20-4505-a76a-fd389ebd30ca";
+  const apiMsg=document.getElementById("apiMsg");
+  document.getElementById("apiForm").addEventListener("submit",async e=>{
+    e.preventDefault();
+    const key=document.getElementById("apiKey").value.trim();
+    if(!key){apiMsg.textContent="인증키를 입력해 주세요.";return;}
+    apiMsg.textContent="불러오는 중…";
+    try{
+      const r=await fetch(`${API}?page=1&perPage=100&returnType=JSON&serviceKey=${encodeURIComponent(key)}`);
+      const j=await r.json().catch(()=>null);
+      if(!r.ok||!j) throw new Error(j&&j.msg?j.msg:"HTTP "+r.status);
+      const rows=Array.isArray(j.data)?j.data:[]; let added=0;
+      for(const row of rows){
+        const ks=Object.keys(row);
+        const kl=ks.find(k=>/^(lat|latitude|위도|y좌표|y)$/i.test(k)), kg=ks.find(k=>/^(lng|lon|long|longitude|경도|x좌표|x)$/i.test(k));
+        const kn=ks.find(k=>/(명|name|title)/i.test(k)&&typeof row[k]==="string");
+        const lat=parseFloat(row[kl]),lon=parseFloat(row[kg]);
+        if(!(lat>33.0&&lat<33.7&&lon>126.0&&lon<127.1)) continue;
+        const addr=ks.find(k=>/(주소|address)/i.test(k)&&typeof row[k]==="string");
+        addMarker({l:"api",n:String(row[kn]||"공공데이터 장소").slice(0,40),lat,lon,d:"공공데이터포털에서 불러온 장소예요.",extra:addr?String(row[addr]).slice(0,80):""}); added++;
+      }
+      chipsRender();
+      apiMsg.textContent=`받아온 ${rows.length}건 중 위·경도가 있어 지도에 추가한 항목: ${added}건`+(added?"":" (이 데이터에 위·경도 항목이 없거나 형식이 달라요)");
+    }catch(err){
+      apiMsg.textContent="불러오지 못했어요: "+String(err.message||err).slice(0,80)+" (인증키 또는 브라우저의 외부 요청 허용 여부를 확인해 주세요.)";
+    }
+  });
+
+  /* --- 크기/렌더 루프 --- */
+  function resize(){const w=box.clientWidth,h=box.clientHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();}
+  new ResizeObserver(resize).observe(box); resize();
+  let onScreen=true; new IntersectionObserver(es=>{onScreen=es[0].isIntersecting;}).observe(box);
+  const tmp=new THREE.Vector3();
+  function frame(){
+    requestAnimationFrame(frame);
+    if(!onScreen) return;
+    spinners.forEach(s=>{s.rotation.z+=0.03;});
+    if(fly){controls.target.lerp(fly,0.08); if(controls.target.distanceTo(fly)<0.05) fly=null;}
+    controls.update(); renderer.render(scene,camera);
+    const w=box.clientWidth,h=box.clientHeight;
+    for(const it of items){
+      tmp.copy(it.v).project(camera);
+      const show=visible[it.layer]&&tmp.z<1&&Math.abs(tmp.x)<1.1&&Math.abs(tmp.y)<1.1;
+      it.b.style.display=show?"":"none";
+      if(show){ it.b.style.left=((tmp.x+1)/2*w)+"px"; it.b.style.top=((1-tmp.y)/2*h)+"px"; }
+    }
+  }
+  msg.textContent=""; frame();
+}
+</script>
+</body>
+</html>
